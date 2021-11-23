@@ -54,14 +54,18 @@ def predict():
 
 		logger.info(f'{dt} Data: id={id}, x={x}')
 		try:
-			preds = model.predict(pd.DataFrame({"id": id, "x": x}))
+			preds, diagnosis, pattern_per_5minute = model.predict(pd.DataFrame({"id": id, "x": x}))
 		except AttributeError as e:
 			logger.warning(f'{dt} Exception: {str(e)}')
 			data['predictions'] = str(e)
+			data['diagnosis'] = str(e)
+			data['pattern_per_5minute'] = str(e)
 			data['success'] = False
 			return flask.jsonify(data)
 
-		data["predictions"] = list(preds)
+		data["predictions"] = list(preds) # list
+		data['diagnosis'] = diagnosis # dict
+		data['pattern_per_5minute'] = pattern_per_5minute # dict
 		# indicate that the request was a success
 		data["success"] = True
 
