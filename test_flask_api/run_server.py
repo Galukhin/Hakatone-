@@ -1,15 +1,16 @@
 import pandas as pd
-import numpy as np
-import dill
+# import numpy as np
+# import dill
 import os
 import flask
 import logging
 from logging.handlers import RotatingFileHandler
 from time import strftime
+from pipeline.pipeline import Pipeline
 
 # initialize our Flask application and the model
 app = flask.Flask(__name__)
-model = None
+# model = None
 
 handler = RotatingFileHandler(filename='app.log', maxBytes=100000, backupCount=10)
 logger = logging.getLogger(__name__)
@@ -17,17 +18,19 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 
-def load_model(model_path):
-	# load the pre-trained model
-	global model
+# def load_model(model_path):
+# 	# load the pre-trained model
+# 	global model
+#
+# 	with open(model_path, 'rb') as f:
+# 		model = dill.load(f)
+# 	print(model)
 
-	with open(model_path, 'rb') as f:
-		model = dill.load(f)
-	print(model)
 
-
-modelpath = "dill_finall_model.dill"
-load_model(modelpath)
+modelpath = "dill_clf_model.dill"
+# load_model(modelpath)
+model = Pipeline(modelpath)
+print(model)
 
 
 @app.route("/", methods=["GET"])
